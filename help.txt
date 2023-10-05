@@ -1,0 +1,13 @@
+================
+= EZDir v0.0.1 =
+================
+!!! IMPORTAINT !!!
+EZDir only creates directories in the home dir [ ~/ ]
+
+how to use:
+    edir [folderName] "[folderDescription]"
+
+flags:
+    -h - print help file
+    -r - remove existing directory
+ 
