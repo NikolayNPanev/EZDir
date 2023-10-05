@@ -9,5 +9,7 @@ how to use:
 
 flags:
     -h - print help file
+        edir -h
     -r - remove existing directory
+        edir -r [folderName]
  
