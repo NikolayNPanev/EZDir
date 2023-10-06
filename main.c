@@ -17,38 +17,70 @@ void printArgs(int argc, char **argv);
 ////////////////////
         // HELP //
 void printHelp(){
+#ifdef _WIN32
+    system("type help.txt");
+#endif
+#ifdef __unix__
     system("cat help.txt");
+#endif
 }
 
         // MAKE DESCRIPTION FILE //
 void makeDescription(int argc,char **argv){
     char cat[] = "echo '";
-    char cmd[1000];
+    size_t catlen = strlen(cat);
+    size_t arg1len = strlen(argv[1]);
+    size_t arg2len = strlen(argv[2]);
+    int cmdlen = catlen+1;
+    cmdlen+=arg1len;
+    cmdlen+=arg2len;
+    char cmd[cmdlen];
     strcpy(cmd,cat);
     strcat(cmd,argv[2]);
     strcat(cmd,"' >> ~/");
     strcat(cmd,argv[1]);
     strcat(cmd,"/description.ezd");
     system(cmd);
-    return;
 }
 
         // MAKE DIRECTORY //
 void makeDir(int argc, char **argv, bool hasDesc){
     char mkdir[] = "mkdir ~/";
-    char cmd[256];
-    strcpy(cmd,mkdir);
-    if(hasDesc==1) strcat(cmd,argv[1]);
-    else strcat(cmd,argv[2]);
-    system(cmd);
+
+    
+    if(hasDesc==1) {
+        size_t mkdlen = strlen(mkdir);
+        size_t arglen = strlen(argv[1]);
+        int cmdlen = mkdlen+1;
+        cmdlen+=arglen;
+        char cmd[cmdlen];
+        strcpy(cmd,mkdir);
+        strcat(cmd,argv[1]);
+        system(cmd);
+        }
+    else {
+        size_t mkdlen = strlen(mkdir);
+        size_t arglen = strlen(argv[2]);
+        int cmdlen = mkdlen+1;
+        cmdlen+=arglen;
+        char cmd[cmdlen];
+        strcpy(cmd,mkdir);
+        strcat(cmd,argv[2]);
+        system(cmd);
+    }
+    
     if(hasDesc==1) printf("\n\tSuccessfully created ~/%s \n",argv[1]);
     else printf("\n\tSuccessfully created ~/%s \n",argv[2]);
 }
 
         // REMOVE DIRECTORY //
 void rmDir(int argc, char **argv){
-    char mkdir[] = "rm -r ~/";
-    char cmd[256];
+    const char *mkdir = "rm -r ~/";
+    size_t mkdlen = strlen(mkdir);
+    size_t arglen = strlen(argv[2]);
+    int cmdlen = mkdlen+1;
+    cmdlen+= arglen;
+    char cmd[cmdlen];
     strcpy(cmd,mkdir);
     strcat(cmd,argv[2]);
     system(cmd);
