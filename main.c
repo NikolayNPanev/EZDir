@@ -17,10 +17,9 @@ void printArgs(int argc, char **argv);
 ////////////////////
         // HELP //
 void printHelp(){
-#ifdef _WIN32
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
     system("type help.txt");
-#endif
-#ifdef __unix__
+#else
     system("cat help.txt");
 #endif
 }
