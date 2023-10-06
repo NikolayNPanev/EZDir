@@ -48,6 +48,10 @@ void rmDir(int argc, char **argv){
 // ARGUMENT PARSER //
 /////////////////////
 char *argOperationParser(int argc, char **argv){
+    if(argc==1){
+        printf("Use -h for help\n");
+        return "102";           //not enough arguments
+    }
     //parse flags
     if(argv[1][0]=='-' ){
         switch(argv[1][1]){
@@ -59,6 +63,7 @@ char *argOperationParser(int argc, char **argv){
                 return "000";
             default:            //invalid flag, error 101
                 printf("Invalid flag!\n");
+                printf("Use -h for help\n");
                 return "101";
         }
     }
