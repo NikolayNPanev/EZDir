@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 //////////////////////
 // DEFAULT ERR CODE //
 //////////////////////
@@ -21,17 +22,27 @@ void printHelp(){
 
         // MAKE DESCRIPTION FILE //
 void makeDescription(int argc,char **argv){
+    char cat[] = "echo '";
+    char cmd[1000];
+    strcpy(cmd,cat);
+    strcat(cmd,argv[2]);
+    strcat(cmd,"' >> ~/");
+    strcat(cmd,argv[1]);
+    strcat(cmd,"/description.ezd");
+    system(cmd);
     return;
 }
 
         // MAKE DIRECTORY //
-void makeDir(int argc, char **argv){
+void makeDir(int argc, char **argv, bool hasDesc){
     char mkdir[] = "mkdir ~/";
     char cmd[256];
     strcpy(cmd,mkdir);
-    strcat(cmd,argv[1]);
+    if(hasDesc==1) strcat(cmd,argv[1]);
+    else strcat(cmd,argv[2]);
     system(cmd);
-    printf("\n\tSuccessfully created ~/%s \n",argv[1]);
+    if(hasDesc==1) printf("\n\tSuccessfully created ~/%s \n",argv[1]);
+    else printf("\n\tSuccessfully created ~/%s \n",argv[2]);
 }
 
         // REMOVE DIRECTORY //
@@ -52,6 +63,8 @@ char *argOperationParser(int argc, char **argv){
         printf("Use -h for help\n");
         return "102";           //not enough arguments
     }
+    bool hasDesc = 1;
+
     //parse flags
     if(argv[1][0]=='-' ){
         switch(argv[1][1]){
@@ -61,6 +74,9 @@ char *argOperationParser(int argc, char **argv){
             case 'r':           //remove flag
                 rmDir(argc,argv);
                 return "000";
+            case 'e':
+                hasDesc=0;
+                break;
             default:            //invalid flag, error 101
                 printf("Invalid flag!\n");
                 printf("Use -h for help\n");
@@ -68,7 +84,17 @@ char *argOperationParser(int argc, char **argv){
         }
     }
     //if no flags, create the dir
-    makeDir(argc,argv);
+    if(hasDesc==1){
+        if(argc<3){
+        printf("Use -h for help\n");
+        return "102";           //not enough arguments
+        }
+        makeDir(argc,argv,hasDesc);
+        makeDescription(argc,argv);
+    }
+    else{
+        makeDir(argc,argv,hasDesc);
+    }
     return "000";
 }
 

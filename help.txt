@@ -12,4 +12,5 @@ flags:
         edir -h
     -r - remove existing directory
         edir -r [folderName]
- 
+    -e - create without description
+        edir -e [folderName]
